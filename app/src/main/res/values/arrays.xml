@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="menuCategory">
+        <item>Beverage</item>
+        <item>Breakfast</item>
+        <item>Bakery &amp; Ice Cream</item>
+        <item>Lunch</item>
+        <item>Snacks</item>
+        <item>Dinner</item>
+        <item>Soft Drinks</item>
+        <item>Hard Drinks</item>
+    </string-array>
+
+    <string-array name="packingLevels">
+        <item>High</item>
+        <item>Low</item>
+        <item>None</item>
+    </string-array>
+
+    <string-array name="packingType">
+        <item>Hot</item>
+        <item>Salt</item>
+        <item>Sugary</item>
+        <item>Spicy</item>
+        <item>Oily</item>
+    </string-array>
+</resources>

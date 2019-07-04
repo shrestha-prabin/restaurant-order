@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddOrderActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <!--tableNumber, time, items, quantity, packing, remarks, kitchenProcess, chefName, completed;-->
+        <Spinner
+            android:id="@+id/add_spinCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:entries="@array/menuCategory" />
+
+        <EditText
+            android:id="@+id/add_etTableNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Table Number"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/add_etItems"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Items"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/add_etQuantity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Quantity"
+            android:inputType="number" />
+
+        <Spinner
+            android:id="@+id/add_spinPackingType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/packingType"
+            android:hint="Packing Type" />
+
+        <Spinner
+            android:id="@+id/add_spinPackingLevel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/packingLevels" />
+
+        <EditText
+            android:id="@+id/add_etRemarks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Remarks"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/add_btnSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add" />
+
+        <Button
+            android:id="@+id/add_btnCancel"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cancel" />
+
+    </LinearLayout>
+</ScrollView>

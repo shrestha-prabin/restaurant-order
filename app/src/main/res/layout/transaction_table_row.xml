@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.flexbox.FlexboxLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/tablerow"
+    app:alignItems="center"
+    app:showDivider="middle"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp">
+
+    <TextView
+        android:id="@+id/tablerow_tvSN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SN"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        app:layout_flexBasisPercent="4%" />
+
+    <TextView
+        android:id="@+id/tablerow_tvTableNo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Table"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        app:layout_flexBasisPercent="10%" />
+
+
+    <TextView
+        android:id="@+id/tablerow_tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Time"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        app:layout_flexBasisPercent="10%" />
+
+    <TextView
+        android:id="@+id/tablerow_tvItems"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:text="Items"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        app:layout_flexBasisPercent="10%" />
+
+    <TextView
+        android:id="@+id/tablerow_tvQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Quantity"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        app:layout_flexBasisPercent="10%"
+        />
+
+    <TextView
+        android:id="@+id/tablerow_tvPacking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Packing"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        app:layout_flexBasisPercent="15%" />
+
+    <TextView
+        android:id="@+id/tablerow_tvRemarks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remarks"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        app:layout_flexBasisPercent="15%" />
+
+    <TextView
+        android:id="@+id/tablerow_tvKitchenProcess"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Kitchen Process"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        app:layout_flexBasisPercent="15%" />
+
+    <TextView
+        android:id="@+id/tablerow_tvChef"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chef"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        app:layout_flexBasisPercent="10%" />
+
+</com.google.android.flexbox.FlexboxLayout>

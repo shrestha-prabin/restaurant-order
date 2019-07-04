@@ -1,0 +1,109 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:alignItems="center" >
+
+        <TextView
+            android:id="@+id/tablerow_lbl_tvSN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SN"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_flexBasisPercent="4%" />
+
+        <TextView
+            android:id="@+id/tablerow_lbl_tvTableNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Table"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_flexBasisPercent="10%" />
+
+
+        <TextView
+            android:id="@+id/tablerow_lbl_tvTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_flexBasisPercent="10%" />
+
+        <TextView
+            android:id="@+id/tablerow_lbl_tvItems"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Items"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_flexBasisPercent="10%" />
+
+        <TextView
+            android:id="@+id/tablerow_lbl_tvQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quantity"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_flexBasisPercent="10%" />
+
+        <TextView
+            android:id="@+id/tablerow_lbl_tvPacking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Packing"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_flexBasisPercent="15%" />
+
+        <TextView
+            android:id="@+id/tablerow_lbl_tvRemarks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Remarks"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_flexBasisPercent="15%" />
+
+        <TextView
+            android:id="@+id/tablerow_lbl_tvKitchenProcess"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kitchen Process"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_flexBasisPercent="15%" />
+
+        <TextView
+            android:id="@+id/tablerow_lbl_tvChef"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chef"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_flexBasisPercent="10%" />
+    </com.google.android.flexbox.FlexboxLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvTransactionTable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

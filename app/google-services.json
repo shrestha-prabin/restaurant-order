@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "504856174051",
+    "firebase_url": "https://restaurant-admin-panel.firebaseio.com",
+    "project_id": "restaurant-admin-panel",
+    "storage_bucket": "restaurant-admin-panel.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:504856174051:android:68223a39a1d029a5",
+        "android_client_info": {
+          "package_name": "com.example.prabin.restaurant"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "504856174051-sp4sq8f0dsh8kjjfgj1v4js0f592d603.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.prabin.restaurant",
+            "certificate_hash": "fd372b30fc47a8a79046a6ca51972ec3daa07cbb"
+          }
+        },
+        {
+          "client_id": "504856174051-pgqkvagmlug9jn7eilt8sd2skp9dsj1t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwQHPnkxvdeQNowGxP_HIGEYQ4KtafPGA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "504856174051-pgqkvagmlug9jn7eilt8sd2skp9dsj1t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
