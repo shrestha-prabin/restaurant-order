@@ -89,7 +89,6 @@ public class AddOrderActivity extends AppCompatActivity {
         orderItem.setChefName("-");
         orderItem.setCompleted("0");
 
-
        if(dbHelper.addNewOrder(orderItem, 1)) {
            Toast.makeText(this, "Order Placed", Toast.LENGTH_SHORT).show();
            finish();
