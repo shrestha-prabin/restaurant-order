@@ -51,28 +51,30 @@ public class TransactionTableFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_transaction_table, container, false);
 
         rvTransactionTable = view.findViewById(R.id.rvTransactionTable);
-//        orderItemList = new DatabaseHelper(getContext()).getOrders();
-
         dbHelper = new DatabaseHelper(getContext());
+        orderItemList = dbHelper.getOrders();
 
-        mAdapter = new TransactionTableRVAdapter(orderItemList, view.getContext());
+        mAdapter = new TransactionTableRVAdapter(orderItemList, getContext());
+
         rvTransactionTable.setLayoutManager(new LinearLayoutManager(getContext()));
         rvTransactionTable.setItemAnimator(new DefaultItemAnimator());
         rvTransactionTable.setAdapter(mAdapter);
         rvTransactionTable.addItemDecoration(new DividerItemDecoration(rvTransactionTable.getContext(), DividerItemDecoration.VERTICAL));
+
+        fetchData();
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        fetchData();
+//        fetchData();
     }
 
     private void fetchData() {
         DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("orders");
 
-        orderRef.addChildEventListener(new ChildEventListener() {
+        orderRef.limitToLast(1).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 OrderItem item = dataSnapshot.getValue(OrderItem.class);
@@ -85,8 +87,8 @@ public class TransactionTableFragment extends Fragment {
                 orderItemList.add(item);
 //                orderItemList = dbHelper.getOrders();
 
-//                mAdapter.notifyDataSetChanged();
-                mAdapter.updateDataList(orderItemList);
+                mAdapter.notifyDataSetChanged();
+//                mAdapter.updateDataList(orderItemList);
             }
 
             @Override
