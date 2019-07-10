@@ -29,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_CHEF_NAME = "chef_name";
     public static final String COLUMN_COMPLETED = "completed";
 
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 3;
 
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -63,7 +63,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         0 - in sync with server
         1 - not synced with server
     */
-    public boolean addNewOrder(OrderItem item, int status) {
+    public boolean addNewOrder(OrderItem item) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
@@ -75,24 +75,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_REMARKS, item.getRemarks());
         contentValues.put(COLUMN_KITCHEN_PROCESS, item.getKitchenProcess());
         contentValues.put(COLUMN_CHEF_NAME, item.getChefName());
-        contentValues.put(COLUMN_COMPLETED, item.getCompleted());
 
         db.insert(TABLE_NAME, null, contentValues);
         db.close();
         return true;
     }
 
-    /*
-        update the sync status of the order
-    */
-    public boolean updateOrderStatus(int id, int status) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(COLUMN_COMPLETED, status);
-        db.update(TABLE_NAME, contentValues, COLUMN_ID + "=" + id, null);
-        db.close();
-        return true;
-    }
 
     public List<OrderItem> getOrders() {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -100,7 +88,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(sql, null);
 
         List<OrderItem> items = new ArrayList<>();
-
 
         if (cursor.moveToFirst()) {
             do {

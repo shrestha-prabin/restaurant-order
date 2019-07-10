@@ -1,5 +1,6 @@
 package com.example.prabin.restaurant;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,6 +12,10 @@ import android.widget.Toast;
 
 import com.example.prabin.restaurant.helper.DatabaseHelper;
 import com.example.prabin.restaurant.modal.OrderItem;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.w3c.dom.Text;
 
@@ -66,6 +71,8 @@ public class AddOrderActivity extends AppCompatActivity {
     }
 
     private void submitOrder() {
+        DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("orders");
+
         String tableNumber = etTableNumber.getText().toString();
         String items = etItems.getText().toString();
         String quantity = etQuantity.getText().toString();
@@ -78,7 +85,7 @@ public class AddOrderActivity extends AppCompatActivity {
                 + " - " + packingLevels[spinPackingLevel.getSelectedItemPosition()];
         String time = getTime();
 
-        OrderItem orderItem  = new OrderItem();
+        final OrderItem orderItem  = new OrderItem();
         orderItem.setTableNumber(tableNumber);
         orderItem.setTime(time);
         orderItem.setItems(items);
@@ -89,10 +96,14 @@ public class AddOrderActivity extends AppCompatActivity {
         orderItem.setChefName("-");
         orderItem.setCompleted("0");
 
-       if(dbHelper.addNewOrder(orderItem, 1)) {
-           Toast.makeText(this, "Order Placed", Toast.LENGTH_SHORT).show();
-           finish();
-       }
+       orderRef.push().setValue(orderItem).addOnCompleteListener(new OnCompleteListener<Void>() {
+           @Override
+           public void onComplete(@NonNull Task<Void> task) {
+               Toast.makeText(AddOrderActivity.this, "Order Placed", Toast.LENGTH_SHORT).show();
+               finish();
+//               dbHelper.addNewOrder(orderItem);
+           }
+       });
     }
 
     private void cancelOrderEntry() {

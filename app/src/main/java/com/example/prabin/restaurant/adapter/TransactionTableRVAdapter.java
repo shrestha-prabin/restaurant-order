@@ -73,40 +73,40 @@ public class TransactionTableRVAdapter extends RecyclerView.Adapter<TransactionT
         viewHolder.tvKitchenProcess.setText(orderItem.getKitchenProcess());
         viewHolder.tvChef.setText(orderItem.getChefName());
 
-        if (orderItem.getCompleted().equals("0")) {
-            viewHolder.tvSN.setTextColor(colorWhite);
-            viewHolder.tvTime.setTextColor(colorWhite);
-            viewHolder.tvTableNo.setTextColor(colorWhite);
-            viewHolder.tvItems.setTextColor(colorWhite);
-            viewHolder.tvQuantity.setTextColor(colorWhite);
-            viewHolder.tvPacking.setTextColor(colorWhite);
-            viewHolder.tvRemarks.setTextColor(colorWhite);
-            viewHolder.tvKitchenProcess.setTextColor(colorWhite);
-            viewHolder.tvChef.setTextColor(colorWhite);
-
-            switch (orderItem.getKitchenProcess().toLowerCase()) {
-                case "order":
-                    viewHolder.layout.setBackgroundColor(colorMaroon);
-                    break;
-                case "cooking":
-                    viewHolder.layout.setBackgroundColor(colorOrange);
-                    break;
-                case "cooked":
-                    viewHolder.layout.setBackgroundColor(colorGreen);
-                    break;
-            }
-        } else {
-            viewHolder.tvSN.setTextColor(colorGray);
-            viewHolder.tvTime.setTextColor(colorGray);
-            viewHolder.tvTableNo.setTextColor(colorGray);
-            viewHolder.tvItems.setTextColor(colorGray);
-            viewHolder.tvQuantity.setTextColor(colorGray);
-            viewHolder.tvPacking.setTextColor(colorGray);
-            viewHolder.tvRemarks.setTextColor(colorGray);
-            viewHolder.tvKitchenProcess.setTextColor(colorGray);
-            viewHolder.tvChef.setTextColor(colorGray);
-            viewHolder.layout.setBackgroundColor(colorWhite);
-        }
+//        if (orderItem.getCompleted().equals("0")) {
+//            viewHolder.tvSN.setTextColor(colorWhite);
+//            viewHolder.tvTime.setTextColor(colorWhite);
+//            viewHolder.tvTableNo.setTextColor(colorWhite);
+//            viewHolder.tvItems.setTextColor(colorWhite);
+//            viewHolder.tvQuantity.setTextColor(colorWhite);
+//            viewHolder.tvPacking.setTextColor(colorWhite);
+//            viewHolder.tvRemarks.setTextColor(colorWhite);
+//            viewHolder.tvKitchenProcess.setTextColor(colorWhite);
+//            viewHolder.tvChef.setTextColor(colorWhite);
+//
+//            switch (orderItem.getKitchenProcess().toLowerCase()) {
+//                case "order":
+//                    viewHolder.layout.setBackgroundColor(colorMaroon);
+//                    break;
+//                case "cooking":
+//                    viewHolder.layout.setBackgroundColor(colorOrange);
+//                    break;
+//                case "cooked":
+//                    viewHolder.layout.setBackgroundColor(colorGreen);
+//                    break;
+//            }
+//        } else {
+//            viewHolder.tvSN.setTextColor(colorGray);
+//            viewHolder.tvTime.setTextColor(colorGray);
+//            viewHolder.tvTableNo.setTextColor(colorGray);
+//            viewHolder.tvItems.setTextColor(colorGray);
+//            viewHolder.tvQuantity.setTextColor(colorGray);
+//            viewHolder.tvPacking.setTextColor(colorGray);
+//            viewHolder.tvRemarks.setTextColor(colorGray);
+//            viewHolder.tvKitchenProcess.setTextColor(colorGray);
+//            viewHolder.tvChef.setTextColor(colorGray);
+//            viewHolder.layout.setBackgroundColor(colorWhite);
+//        }
 
         final String kitchenProcess = orderItem.getKitchenProcess().toLowerCase();
 
