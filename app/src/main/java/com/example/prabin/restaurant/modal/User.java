@@ -92,5 +92,9 @@ public class User {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
+
+    public String getFullName() {
+        return this.firstName + " " + this.lastName;
+    }
 }
 

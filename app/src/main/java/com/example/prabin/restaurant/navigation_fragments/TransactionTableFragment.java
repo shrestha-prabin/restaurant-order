@@ -36,6 +36,8 @@ import java.util.List;
 public class TransactionTableFragment extends Fragment {
 
     private List<OrderItem> orderItemList = new ArrayList<>();
+    private List<String> orderItemKeysList = new ArrayList<>();
+
     private RecyclerView rvTransactionTable;
     private TransactionTableRVAdapter mAdapter;
     private DatabaseHelper dbHelper;
@@ -52,16 +54,19 @@ public class TransactionTableFragment extends Fragment {
 
         rvTransactionTable = view.findViewById(R.id.rvTransactionTable);
         dbHelper = new DatabaseHelper(getContext());
-        orderItemList = dbHelper.getOrders();
+//        orderItemList = dbHelper.getOrders();
 
-        mAdapter = new TransactionTableRVAdapter(orderItemList, getContext());
+        mAdapter = new TransactionTableRVAdapter(orderItemList, orderItemKeysList, getContext());
 
-        rvTransactionTable.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager llManager = new LinearLayoutManager(getContext());
+//        llManager.setReverseLayout(true);
+        rvTransactionTable.setLayoutManager(llManager);
         rvTransactionTable.setItemAnimator(new DefaultItemAnimator());
         rvTransactionTable.setAdapter(mAdapter);
         rvTransactionTable.addItemDecoration(new DividerItemDecoration(rvTransactionTable.getContext(), DividerItemDecoration.VERTICAL));
 
         fetchData();
+        listenDataChanges();
         return view;
     }
 
@@ -74,31 +79,65 @@ public class TransactionTableFragment extends Fragment {
     private void fetchData() {
         DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("orders");
 
+        orderRef.orderByChild("completed").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                orderItemList.clear();
+                orderItemKeysList.clear();
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+                        orderItemList.add(dsp.getValue(OrderItem.class));
+                        orderItemKeysList.add(dsp.getKey());
+                    }
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void listenDataChanges() {
+        DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("orders");
+
         orderRef.limitToLast(1).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                OrderItem item = dataSnapshot.getValue(OrderItem.class);
+                fetchData();
 
-                Log.d("fire_order", item.getItems());
+//                OrderItem item = dataSnapshot.getValue(OrderItem.class);
+//
+//                String key = dataSnapshot.getKey();
+//                if (!orderItemKeysList.contains(key)) {
+//                    orderItemKeysList.add(dataSnapshot.getKey());
+//                    orderItemList.add(item);
+//                    mAdapter.notifyDataSetChanged();
+//                }
+
 //                dbHelper.addNewOrder(item);
 //                updateDisplayTable();
 
 
-                orderItemList.add(item);
 //                orderItemList = dbHelper.getOrders();
 
-                mAdapter.notifyDataSetChanged();
 //                mAdapter.updateDataList(orderItemList);
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//                OrderItem updatedItem = dataSnapshot.getValue(OrderItem.class);
+//                String key = dataSnapshot.getKey();
+                fetchData();
 
+//                mAdapter.updateDataItem(key, updatedItem);
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
+                fetchData();
             }
 
             @Override
@@ -114,6 +153,18 @@ public class TransactionTableFragment extends Fragment {
 
 //        orderItemList = new DatabaseHelper(getContext()).getOrders();
 //        mAdapter.updateDataList(orderItemList);
+
+        orderRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                fetchData();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void updateDisplayTable() {
@@ -122,6 +173,5 @@ public class TransactionTableFragment extends Fragment {
 
         mAdapter.updateDataList(orderItemList);
     }
-
 
 }

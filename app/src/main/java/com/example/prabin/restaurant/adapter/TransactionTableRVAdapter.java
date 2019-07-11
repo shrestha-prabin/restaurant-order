@@ -10,8 +10,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.prabin.restaurant.R;
+import com.example.prabin.restaurant.helper.PrefManager;
 import com.example.prabin.restaurant.modal.OrderItem;
 import com.google.android.flexbox.FlexboxLayout;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -19,10 +22,14 @@ public class TransactionTableRVAdapter extends RecyclerView.Adapter<TransactionT
 
     private int colorMaroon, colorOrange, colorGreen, colorWhite, colorGray;
     private List<OrderItem> orderItemList;
+    private List<String> orderItemKeysList;
     private Context mContext;
 
-    public TransactionTableRVAdapter(List<OrderItem> orderItemList, Context context) {
+    DatabaseReference mOrderRef = FirebaseDatabase.getInstance().getReference("orders");
+
+    public TransactionTableRVAdapter(List<OrderItem> orderItemList, List<String> orderItemKeysList, Context context) {
         this.orderItemList = orderItemList;
+        this.orderItemKeysList = orderItemKeysList;
         this.mContext = context;
 
         this.colorMaroon = context.getResources().getColor(R.color.maroon);
@@ -62,6 +69,7 @@ public class TransactionTableRVAdapter extends RecyclerView.Adapter<TransactionT
 
     @Override
     public void onBindViewHolder(@NonNull TransactionTableRVAdapter.ViewHolder viewHolder, final int i) {
+
         OrderItem orderItem = orderItemList.get(i);
         viewHolder.tvSN.setText(String.valueOf(i + 1));
         viewHolder.tvTime.setText(orderItem.getTime());
@@ -73,40 +81,39 @@ public class TransactionTableRVAdapter extends RecyclerView.Adapter<TransactionT
         viewHolder.tvKitchenProcess.setText(orderItem.getKitchenProcess());
         viewHolder.tvChef.setText(orderItem.getChefName());
 
-//        if (orderItem.getCompleted().equals("0")) {
-//            viewHolder.tvSN.setTextColor(colorWhite);
-//            viewHolder.tvTime.setTextColor(colorWhite);
-//            viewHolder.tvTableNo.setTextColor(colorWhite);
-//            viewHolder.tvItems.setTextColor(colorWhite);
-//            viewHolder.tvQuantity.setTextColor(colorWhite);
-//            viewHolder.tvPacking.setTextColor(colorWhite);
-//            viewHolder.tvRemarks.setTextColor(colorWhite);
-//            viewHolder.tvKitchenProcess.setTextColor(colorWhite);
-//            viewHolder.tvChef.setTextColor(colorWhite);
-//
-//            switch (orderItem.getKitchenProcess().toLowerCase()) {
-//                case "order":
-//                    viewHolder.layout.setBackgroundColor(colorMaroon);
-//                    break;
-//                case "cooking":
-//                    viewHolder.layout.setBackgroundColor(colorOrange);
-//                    break;
-//                case "cooked":
-//                    viewHolder.layout.setBackgroundColor(colorGreen);
-//                    break;
-//            }
-//        } else {
-//            viewHolder.tvSN.setTextColor(colorGray);
-//            viewHolder.tvTime.setTextColor(colorGray);
-//            viewHolder.tvTableNo.setTextColor(colorGray);
-//            viewHolder.tvItems.setTextColor(colorGray);
-//            viewHolder.tvQuantity.setTextColor(colorGray);
-//            viewHolder.tvPacking.setTextColor(colorGray);
-//            viewHolder.tvRemarks.setTextColor(colorGray);
-//            viewHolder.tvKitchenProcess.setTextColor(colorGray);
-//            viewHolder.tvChef.setTextColor(colorGray);
-//            viewHolder.layout.setBackgroundColor(colorWhite);
-//        }
+        viewHolder.tvSN.setTextColor(colorWhite);
+        viewHolder.tvTime.setTextColor(colorWhite);
+        viewHolder.tvTableNo.setTextColor(colorWhite);
+        viewHolder.tvItems.setTextColor(colorWhite);
+        viewHolder.tvQuantity.setTextColor(colorWhite);
+        viewHolder.tvPacking.setTextColor(colorWhite);
+        viewHolder.tvRemarks.setTextColor(colorWhite);
+        viewHolder.tvKitchenProcess.setTextColor(colorWhite);
+        viewHolder.tvChef.setTextColor(colorWhite);
+
+        switch (orderItem.getKitchenProcess().toLowerCase()) {
+            case "order":
+                viewHolder.layout.setBackgroundColor(colorMaroon);
+                break;
+            case "cooking":
+                viewHolder.layout.setBackgroundColor(colorOrange);
+                break;
+            case "cooked":
+                viewHolder.layout.setBackgroundColor(colorGreen);
+                break;
+            default:
+                viewHolder.tvSN.setTextColor(colorGray);
+                viewHolder.tvTime.setTextColor(colorGray);
+                viewHolder.tvTableNo.setTextColor(colorGray);
+                viewHolder.tvItems.setTextColor(colorGray);
+                viewHolder.tvQuantity.setTextColor(colorGray);
+                viewHolder.tvPacking.setTextColor(colorGray);
+                viewHolder.tvRemarks.setTextColor(colorGray);
+                viewHolder.tvKitchenProcess.setTextColor(colorGray);
+                viewHolder.tvChef.setTextColor(colorGray);
+                viewHolder.layout.setBackgroundColor(colorWhite);
+                break;
+        }
 
         final String kitchenProcess = orderItem.getKitchenProcess().toLowerCase();
 
@@ -116,20 +123,49 @@ public class TransactionTableRVAdapter extends RecyclerView.Adapter<TransactionT
                 OrderItem item = orderItemList.get(i);
                 switch (kitchenProcess) {
                     case "order":
-                        item.setKitchenProcess("Cooking");
+                        setChefName(i);
+                        updateKitchenProcess(i, "Cooking");
+//                        item.setKitchenProcess("Cooking");
                         break;
                     case "cooking":
-                        item.setKitchenProcess("Cooked");
+                        updateKitchenProcess(i, "Cooked");
+//                        item.setKitchenProcess("Cooked");
                         break;
                     case "cooked":
-                        item.setKitchenProcess("Complete");
-                        item.setCompleted("1");
+                        updateKitchenProcess(i, "Complete");
+                        setOrderCompletion(i);
+//                        item.setKitchenProcess("Complete");
+//                        item.setCompleted("1");
                         break;
                 }
-                updateDataItem(i);
+                updateDataItem(i, item);
                 return false;
             }
         });
+    }
+
+    private void updateKitchenProcess(int index, String process) {
+        OrderItem item = orderItemList.get(index);
+        item.setKitchenProcess(process);
+        String orderKey = orderItemKeysList.get(index);
+
+        mOrderRef.child(orderKey).setValue(item);
+
+    }
+
+    private void setOrderCompletion(int index) {
+        OrderItem item = orderItemList.get(index);
+        item.setCompleted("1");
+        String orderKey = orderItemKeysList.get(index);
+        mOrderRef.child(orderKey).setValue(item);
+    }
+
+    private void setChefName(int index) {
+        OrderItem item = orderItemList.get(index);
+        String orderKey = orderItemKeysList.get(index);
+
+        item.setChefName(new PrefManager(mContext).getUserDetails().getFullName());
+        mOrderRef.child(orderKey).setValue(item);
     }
 
     public void updateDataList(List<OrderItem> data) {
@@ -138,9 +174,24 @@ public class TransactionTableRVAdapter extends RecyclerView.Adapter<TransactionT
         this.notifyDataSetChanged();
     }
 
-    private void updateDataItem(int index) {
+    public void updateDataItem(String key, OrderItem updatedItem) {
+
+        int index = orderItemKeysList.indexOf(key);
+        if(updatedItem.getCompleted().equals("1")) {
+            orderItemList.remove(index);
+//            orderItemList.add(updatedItem);
+//            this.updateDataList(orderItemList);
+        } else {
+        this.updateDataItem(index, updatedItem);
+        }
+    }
+
+    private void updateDataItem(int index, OrderItem item) {
+        orderItemList.set(index, item);
         this.notifyItemChanged(index);
     }
+
+
 
     @Override
     public int getItemCount() {
