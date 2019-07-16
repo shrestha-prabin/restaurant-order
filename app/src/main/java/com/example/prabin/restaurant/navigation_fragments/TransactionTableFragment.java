@@ -2,18 +2,18 @@ package com.example.prabin.restaurant.navigation_fragments;
 
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.prabin.restaurant.R;
 import com.example.prabin.restaurant.adapter.TransactionTableRVAdapter;
@@ -41,6 +41,7 @@ public class TransactionTableFragment extends Fragment {
     private RecyclerView rvTransactionTable;
     private TransactionTableRVAdapter mAdapter;
     private DatabaseHelper dbHelper;
+    FloatingActionButton fabAddOrder;
 
     public TransactionTableFragment() {
     }
@@ -52,6 +53,7 @@ public class TransactionTableFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_transaction_table, container, false);
 
+        fabAddOrder = getActivity().findViewById(R.id.fab_addOrder);
         rvTransactionTable = view.findViewById(R.id.rvTransactionTable);
         dbHelper = new DatabaseHelper(getContext());
 //        orderItemList = dbHelper.getOrders();
@@ -65,15 +67,33 @@ public class TransactionTableFragment extends Fragment {
         rvTransactionTable.setAdapter(mAdapter);
         rvTransactionTable.addItemDecoration(new DividerItemDecoration(rvTransactionTable.getContext(), DividerItemDecoration.VERTICAL));
 
+        hideFABOnScroll();
         fetchData();
         listenDataChanges();
         return view;
     }
 
+    private void hideFABOnScroll() {
+        // hide fab on scroll, show after 1s
+        rvTransactionTable.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+//                if (dy > 0) fabAddOrder.hide();
+//                else if (dy < 0) fabAddOrder.show();
+                fabAddOrder.hide();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        fabAddOrder.show();
+                    }
+                },1000);
+            }
+        });
+    }
+
     @Override
     public void onStart() {
         super.onStart();
-//        fetchData();
     }
 
     private void fetchData() {
@@ -102,11 +122,13 @@ public class TransactionTableFragment extends Fragment {
 
     private void listenDataChanges() {
         DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("orders");
+        orderRef.keepSynced(true);
 
         orderRef.limitToLast(1).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 fetchData();
+                rvTransactionTable.scrollToPosition(0);
 
 //                OrderItem item = dataSnapshot.getValue(OrderItem.class);
 //
@@ -128,9 +150,9 @@ public class TransactionTableFragment extends Fragment {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                fetchData();
 //                OrderItem updatedItem = dataSnapshot.getValue(OrderItem.class);
 //                String key = dataSnapshot.getKey();
-                fetchData();
 
 //                mAdapter.updateDataItem(key, updatedItem);
             }
@@ -162,16 +184,15 @@ public class TransactionTableFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
 
-    private void updateDisplayTable() {
-
-        orderItemList = dbHelper.getOrders();
-
-        mAdapter.updateDataList(orderItemList);
-    }
+//    private void updateDisplayTable() {
+//
+//        orderItemList = dbHelper.getOrders();
+//
+//        mAdapter.updateDataList(orderItemList);
+//    }
 
 }

@@ -1,83 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".AddOrderActivity">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/menu_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/menu_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabMode="scrollable" />
+
+    </android.support.v4.view.ViewPager>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <!--tableNumber, time, items, quantity, packing, remarks, kitchenProcess, chefName, completed;-->
-        <Spinner
-            android:id="@+id/add_spinCategory"
-            android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp">
+
+        <TextView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:entries="@array/menuCategory" />
+            android:layout_weight="0.2"
+            android:text="Table No." />
 
         <EditText
-            android:id="@+id/add_etTableNumber"
-            android:layout_width="match_parent"
+            android:id="@+id/add_order_etTableNo"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Table Number"
-            android:inputType="textPersonName" />
-
-        <EditText
-            android:id="@+id/add_etItems"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Items"
-            android:inputType="textPersonName" />
-
-        <EditText
-            android:id="@+id/add_etQuantity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Quantity"
-            android:inputType="number" />
-
-        <Spinner
-            android:id="@+id/add_spinPackingType"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:entries="@array/packingType"
-            android:hint="Packing Type" />
-
-        <Spinner
-            android:id="@+id/add_spinPackingLevel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:entries="@array/packingLevels" />
-
-        <EditText
-            android:id="@+id/add_etRemarks"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Remarks"
-            android:inputType="textPersonName" />
-
-        <Button
-            android:id="@+id/add_btnSubmit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Add" />
-
-        <Button
-            android:id="@+id/add_btnCancel"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Cancel" />
-
+            android:layout_weight="0.8"
+            android:background="@drawable/edittext"
+            android:inputType="textPersonName"
+            android:padding="6dp"
+            android:hint="Table Number" />
     </LinearLayout>
-</ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:text="Packing" />
+
+        <Spinner
+            android:id="@+id/add_order_spinPackingType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"
+            android:background="@drawable/edittext"
+            android:entries="@array/packingType"
+            android:padding="6dp"/>
+
+        <Spinner
+            android:id="@+id/add_order_spinPackingLevel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"
+            android:background="@drawable/edittext"
+            android:entries="@array/packingLevels"
+            android:padding="6dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:text="Remarks" />
+
+        <EditText
+            android:id="@+id/add_order_etRemarks"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:background="@drawable/edittext"
+            android:inputType="text"
+            android:padding="6dp"
+            android:hint="Remarks"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/add_order_btnSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_red"
+        android:text="Add Order"
+        android:textColor="@color/white" />
+
+</LinearLayout>

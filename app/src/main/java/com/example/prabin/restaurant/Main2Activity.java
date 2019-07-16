@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.SubMenu;
@@ -26,6 +27,8 @@ import com.example.prabin.restaurant.helper.PrefManager;
 import com.example.prabin.restaurant.modal.User;
 import com.example.prabin.restaurant.navigation_fragments.HomeFragment;
 import com.example.prabin.restaurant.navigation_fragments.TransactionTableFragment;
+import com.example.prabin.restaurant.navigation_fragments.manage.ManageMenuFragment;
+import com.example.prabin.restaurant.navigation_fragments.manage.ManageUsersFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class Main2Activity extends AppCompatActivity
@@ -53,8 +56,7 @@ public class Main2Activity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(Main2Activity.this, AddOrderActivity.class));
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
+
             }
         });
 
@@ -69,7 +71,6 @@ public class Main2Activity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         setupNavigationView();
-
 
         View headerView = navigationView.getHeaderView(0);
         btnSignout = headerView.findViewById(R.id.profile_btnSignout);
@@ -86,12 +87,12 @@ public class Main2Activity extends AppCompatActivity
             }
         });
 
-        loadHomeFragment();
+        loadFragment(new HomeFragment());
     }
 
     private void setupNavigationView() {
 
-        NavigationView navigationView =  findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         Menu menu = navigationView.getMenu();
 
         User user = new PrefManager(this).getUserDetails();
@@ -101,7 +102,7 @@ public class Main2Activity extends AppCompatActivity
                         .setIcon(R.drawable.ic_view_list_black_24dp);
 
                 menu.add(R.id.nav_group_manage, MENU_USER, Menu.NONE, "Users")
-                    .setIcon(R.drawable.ic_group_black_24dp);
+                        .setIcon(R.drawable.ic_group_black_24dp);
                 menu.add(R.id.nav_group_manage, MENU_FOOD_MENU, Menu.NONE, "Food Menu")
                         .setIcon(R.drawable.ic_restaurant_menu_black_24dp);
                 break;
@@ -161,12 +162,8 @@ public class Main2Activity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -181,17 +178,19 @@ public class Main2Activity extends AppCompatActivity
 
         switch (id) {
             case R.id.nav_home:
-                loadHomeFragment();
+                loadFragment(new HomeFragment());
                 break;
 
             case MENU_TRANSACTION:
-                loadTableFragment();
+               loadFragment(new TransactionTableFragment());
                 break;
 
             case MENU_USER:
+                loadFragment(new ManageUsersFragment());
                 break;
 
             case MENU_FOOD_MENU:
+                loadFragment(new ManageMenuFragment());
                 break;
         }
 
@@ -200,24 +199,10 @@ public class Main2Activity extends AppCompatActivity
         return true;
     }
 
-    private void loadHomeFragment() {
-        HomeFragment homeFragment = new HomeFragment();
+    private void loadFragment(Fragment fragment) {
         FragmentManager fm = getSupportFragmentManager();
         final FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.navigation_main, homeFragment);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                fragmentTransaction.commit();
-            }
-        }, 250);
-    }
-
-    private void loadTableFragment() {
-        TransactionTableFragment transactionTableFragment = new TransactionTableFragment();
-        FragmentManager fm = getSupportFragmentManager();
-        final FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.navigation_main, transactionTableFragment);
+        fragmentTransaction.replace(R.id.navigation_main, fragment);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

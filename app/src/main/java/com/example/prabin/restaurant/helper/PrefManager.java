@@ -23,6 +23,9 @@ public class PrefManager {
     private static final String PREF_ROLE = "USER_ROLE";
     private static final String PREF_ENABLED = "USER_ENABLED";
 
+    private static final String PREF_ORDER_CART = "ORDER";
+    private static final String PREF_ORDER_CART_ITEM = "ORDER_ITEM";
+    private static final String PREF_ORDER_CART_COUNT = "ORDER_ITEM_COUNT";
 
     public PrefManager(Context context) {
         mContext = context;
@@ -69,6 +72,41 @@ public class PrefManager {
         editor.putString(PREF_PHONE, "");
         editor.putString(PREF_ROLE, "");
         editor.putBoolean(PREF_ENABLED, false);
+        editor.apply();
+    }
+
+    public void setOrderItemName(String itemName) {
+        SharedPreferences sharedPrefs = mContext.getSharedPreferences(PREF_ORDER_CART, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+
+        editor.putString(PREF_ORDER_CART_ITEM, itemName);
+
+        editor.apply();
+    }
+
+    public void setOrderItemCount(int count) {
+        SharedPreferences sharedPrefs = mContext.getSharedPreferences(PREF_ORDER_CART, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+
+        editor.putInt(PREF_ORDER_CART_COUNT, count);
+
+        editor.apply();
+    }
+
+    public String getOrderName() {
+        SharedPreferences sharedPrefs = mContext.getSharedPreferences(PREF_ORDER_CART, Context.MODE_PRIVATE);
+        return sharedPrefs.getString(PREF_ORDER_CART_ITEM, "");
+    }
+    public int getOrderCount() {
+        SharedPreferences sharedPrefs = mContext.getSharedPreferences(PREF_ORDER_CART, Context.MODE_PRIVATE);
+        return sharedPrefs.getInt(PREF_ORDER_CART_COUNT, 0);
+    }
+
+    public void clearOrderDetails() {
+        SharedPreferences sharedPrefs = mContext.getSharedPreferences(PREF_ORDER_CART, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        editor.putString(PREF_ORDER_CART_ITEM, "");
+        editor.putInt(PREF_ORDER_CART_COUNT, 0);
         editor.apply();
     }
 }

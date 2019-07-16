@@ -5,6 +5,15 @@ public class OrderItem {
     private String tableNumber, time, items, quantity, packing, remarks, kitchenProcess, chefName, completed;
 
     public OrderItem() {
+        this.tableNumber = "";
+        this.time = "";
+        this.items = "";
+        this.quantity = "0";
+        this.packing = "";
+        this.remarks = "";
+        this.kitchenProcess = "Order";
+        this.chefName = "-";
+        this.completed = "0";
     }
 
     public OrderItem(String tableNumber, String time, String items, String quantity, String packing, String remarks, String kitchenProcess, String chefName, String completed) {

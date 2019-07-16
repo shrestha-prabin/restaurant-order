@@ -150,7 +150,6 @@ public class TransactionTableRVAdapter extends RecyclerView.Adapter<TransactionT
         String orderKey = orderItemKeysList.get(index);
 
         mOrderRef.child(orderKey).setValue(item);
-
     }
 
     private void setOrderCompletion(int index) {
@@ -190,8 +189,6 @@ public class TransactionTableRVAdapter extends RecyclerView.Adapter<TransactionT
         orderItemList.set(index, item);
         this.notifyItemChanged(index);
     }
-
-
 
     @Override
     public int getItemCount() {
