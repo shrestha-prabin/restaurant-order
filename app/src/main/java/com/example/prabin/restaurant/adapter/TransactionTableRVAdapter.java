@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,20 +17,23 @@ import com.google.android.flexbox.FlexboxLayout;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TransactionTableRVAdapter extends RecyclerView.Adapter<TransactionTableRVAdapter.ViewHolder> {
 
     private int colorMaroon, colorOrange, colorGreen, colorWhite, colorGray;
     private List<OrderItem> orderItemList;
-    private List<String> orderItemKeysList;
+
     private Context mContext;
 
     DatabaseReference mOrderRef = FirebaseDatabase.getInstance().getReference("orders");
 
-    public TransactionTableRVAdapter(List<OrderItem> orderItemList, List<String> orderItemKeysList, Context context) {
+    public TransactionTableRVAdapter(List<OrderItem> orderItemList, Context context) {
+
         this.orderItemList = orderItemList;
-        this.orderItemKeysList = orderItemKeysList;
         this.mContext = context;
 
         this.colorMaroon = context.getResources().getColor(R.color.maroon);
@@ -71,6 +75,7 @@ public class TransactionTableRVAdapter extends RecyclerView.Adapter<TransactionT
     public void onBindViewHolder(@NonNull TransactionTableRVAdapter.ViewHolder viewHolder, final int i) {
 
         OrderItem orderItem = orderItemList.get(i);
+
         viewHolder.tvSN.setText(String.valueOf(i + 1));
         viewHolder.tvTime.setText(orderItem.getTime());
         viewHolder.tvTableNo.setText(orderItem.getTableNumber());
@@ -138,7 +143,7 @@ public class TransactionTableRVAdapter extends RecyclerView.Adapter<TransactionT
 //                        item.setCompleted("1");
                         break;
                 }
-                updateDataItem(i, item);
+//                updateDataItem(i, item);
                 return false;
             }
         });
@@ -147,48 +152,45 @@ public class TransactionTableRVAdapter extends RecyclerView.Adapter<TransactionT
     private void updateKitchenProcess(int index, String process) {
         OrderItem item = orderItemList.get(index);
         item.setKitchenProcess(process);
-        String orderKey = orderItemKeysList.get(index);
 
-        mOrderRef.child(orderKey).setValue(item);
+        mOrderRef.child(item.getKey()).setValue(item);
     }
 
     private void setOrderCompletion(int index) {
         OrderItem item = orderItemList.get(index);
         item.setCompleted("1");
-        String orderKey = orderItemKeysList.get(index);
-        mOrderRef.child(orderKey).setValue(item);
+        mOrderRef.child(item.getKey()).setValue(item);
     }
 
     private void setChefName(int index) {
         OrderItem item = orderItemList.get(index);
-        String orderKey = orderItemKeysList.get(index);
 
         item.setChefName(new PrefManager(mContext).getUserDetails().getFullName());
-        mOrderRef.child(orderKey).setValue(item);
+        mOrderRef.child(item.getKey()).setValue(item);
     }
 
-    public void updateDataList(List<OrderItem> data) {
-        orderItemList.clear();
-        orderItemList.addAll(data);
-        this.notifyDataSetChanged();
-    }
+//    public void updateDataList(List<OrderItem> data) {
+//        orderItemList.clear();
+//        orderItemList.addAll(data);
+//        this.notifyDataSetChanged();
+//    }
 
-    public void updateDataItem(String key, OrderItem updatedItem) {
+//    public void updateDataItem(String key, OrderItem updatedItem) {
+//
+//        int index = orderItemKeysList.indexOf(key);
+//        if(updatedItem.getCompleted().equals("1")) {
+//            orderItemList.remove(index);
+////            orderItemList.add(updatedItem);
+////            this.updateDataList(orderItemList);
+//        } else {
+//        this.updateDataItem(index, updatedItem);
+//        }
+//    }
 
-        int index = orderItemKeysList.indexOf(key);
-        if(updatedItem.getCompleted().equals("1")) {
-            orderItemList.remove(index);
-//            orderItemList.add(updatedItem);
-//            this.updateDataList(orderItemList);
-        } else {
-        this.updateDataItem(index, updatedItem);
-        }
-    }
-
-    private void updateDataItem(int index, OrderItem item) {
-        orderItemList.set(index, item);
-        this.notifyItemChanged(index);
-    }
+//    private void updateDataItem(int index, OrderItem item) {
+//        orderItemList.set(index, item);
+//        this.notifyItemChanged(index);
+//    }
 
     @Override
     public int getItemCount() {

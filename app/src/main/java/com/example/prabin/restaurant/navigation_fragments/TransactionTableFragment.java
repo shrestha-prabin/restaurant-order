@@ -11,6 +11,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -36,7 +42,6 @@ import java.util.List;
 public class TransactionTableFragment extends Fragment {
 
     private List<OrderItem> orderItemList = new ArrayList<>();
-    private List<String> orderItemKeysList = new ArrayList<>();
 
     private RecyclerView rvTransactionTable;
     private TransactionTableRVAdapter mAdapter;
@@ -58,10 +63,10 @@ public class TransactionTableFragment extends Fragment {
         dbHelper = new DatabaseHelper(getContext());
 //        orderItemList = dbHelper.getOrders();
 
-        mAdapter = new TransactionTableRVAdapter(orderItemList, orderItemKeysList, getContext());
+        mAdapter = new TransactionTableRVAdapter(orderItemList, getContext());
 
         LinearLayoutManager llManager = new LinearLayoutManager(getContext());
-//        llManager.setReverseLayout(true);
+        llManager.setReverseLayout(true);
         rvTransactionTable.setLayoutManager(llManager);
         rvTransactionTable.setItemAnimator(new DefaultItemAnimator());
         rvTransactionTable.setAdapter(mAdapter);
@@ -99,16 +104,17 @@ public class TransactionTableFragment extends Fragment {
     private void fetchData() {
         DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("orders");
 
-        orderRef.orderByChild("completed").addListenerForSingleValueEvent(new ValueEventListener() {
+        orderRef.orderByChild("items").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 orderItemList.clear();
-                orderItemKeysList.clear();
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot dsp : dataSnapshot.getChildren()) {
-                        orderItemList.add(dsp.getValue(OrderItem.class));
-                        orderItemKeysList.add(dsp.getKey());
+                        OrderItem item = dsp.getValue(OrderItem.class);
+                        item.setKey(dsp.getKey());
+                        orderItemList.add(item);
                     }
+                    sortOrderItems();
                     mAdapter.notifyDataSetChanged();
                 }
             }
@@ -120,15 +126,24 @@ public class TransactionTableFragment extends Fragment {
         });
     }
 
+    private void sortOrderItems() {
+        Collections.sort(orderItemList, new Comparator<OrderItem>() {
+            @Override
+            public int compare(OrderItem o1, OrderItem o2) {
+                return o2.getCompleted().compareTo(o1.getCompleted());
+            }
+        });
+    }
+
     private void listenDataChanges() {
         DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("orders");
-        orderRef.keepSynced(true);
+//        orderRef.keepSynced(true);
 
         orderRef.limitToLast(1).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 fetchData();
-                rvTransactionTable.scrollToPosition(0);
+                rvTransactionTable.scrollToPosition(orderItemList.size());
 
 //                OrderItem item = dataSnapshot.getValue(OrderItem.class);
 //

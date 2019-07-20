@@ -2,6 +2,7 @@ package com.example.prabin.restaurant.modal;
 
 public class OrderItem {
 
+    private String key;
     private String tableNumber, time, items, quantity, packing, remarks, kitchenProcess, chefName, completed;
 
     public OrderItem() {
@@ -28,6 +29,13 @@ public class OrderItem {
         this.completed = completed;
     }
 
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     public String getTableNumber() {
         return tableNumber;
