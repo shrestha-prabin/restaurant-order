@@ -7,9 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.prabin.restaurant.R;
 import com.example.prabin.restaurant.helper.PrefManager;
 import com.example.prabin.restaurant.modal.MenuItem;
@@ -41,7 +43,10 @@ public class MenuItemListRVAdapter extends RecyclerView.Adapter<MenuItemListRVAd
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
         final MenuItem item = mMenuItemList.get(i);
 
+        Glide.with(mContext).load(item.getImage()).centerCrop().into(viewHolder.ivImage);
         viewHolder.tvItemName.setText(item.getName());
+        viewHolder.tvItemDescription.setText(item.getDescription());
+        viewHolder.tvPrice.setText(item.getPrice());
         viewHolder.tvCount.setText(String.valueOf(item.getOrderCount()));
 
         viewHolder.ibRemove.setOnClickListener(new View.OnClickListener() {
@@ -109,13 +114,17 @@ public class MenuItemListRVAdapter extends RecyclerView.Adapter<MenuItemListRVAd
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvItemName, tvCount;
+        ImageView ivImage;
+        TextView tvItemName, tvCount, tvItemDescription, tvPrice;
         ImageButton ibAdd, ibRemove;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            ivImage = itemView.findViewById(R.id.menu_item_image);
             tvItemName = itemView.findViewById(R.id.menu_item_name);
+            tvItemDescription = itemView.findViewById(R.id.menu_item_description);
+            tvPrice = itemView.findViewById(R.id.menu_item_price);
             tvCount = itemView.findViewById(R.id.menu_item_count);
             ibAdd = itemView.findViewById(R.id.menu_item_increase);
             ibRemove = itemView.findViewById(R.id.menu_item_decrease);

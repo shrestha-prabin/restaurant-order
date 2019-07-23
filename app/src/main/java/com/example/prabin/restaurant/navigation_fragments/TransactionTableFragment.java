@@ -143,7 +143,7 @@ public class TransactionTableFragment extends Fragment {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 fetchData();
-                rvTransactionTable.scrollToPosition(orderItemList.size());
+//                rvTransactionTable.scrollToPosition(orderItemList.size());
 
 //                OrderItem item = dataSnapshot.getValue(OrderItem.class);
 //

@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -53,10 +54,14 @@ public class FoodMenuFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.food_menu_rvList);
         mAdapter = new MenuItemListRVAdapter(getContext(), mMenuList);
 
-        LinearLayoutManager llManager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(llManager);
+//        LinearLayoutManager llManager = new LinearLayoutManager(getContext());
+//        mRecyclerView.setLayoutManager(llManager);
+
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2    ));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL));
+
+        mRecyclerView.setNestedScrollingEnabled(false);
+//        mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL));
     }
 }

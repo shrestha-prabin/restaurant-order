@@ -1,24 +1,57 @@
 package com.example.prabin.restaurant.modal;
 
 public class MenuItem {
-    private String name, category;
+    private String category, image, name, description, price;
     private boolean available;
     private int orderCount;
 
     public MenuItem() {
     }
 
-    public MenuItem(String name, boolean available) {
-        this.name = name;
+    public MenuItem(String name) {
         this.category = "";
-        this.available = available;
+        this.image = "";
+        this.name = name;
+        this.description = "";
+        this.price = "Rs. ";
+        this.available = true;
         this.orderCount = 0;
     }
 
-    public MenuItem(String name, String category, boolean available) {
+    public MenuItem(String image, String name, String description, String price) {
+        this.category = "";
+        this.image = image;
         this.name = name;
+        this.description = description;
+        this.price = price;
+        this.available = true;
+        this.orderCount = 0;
+    }
+
+    public MenuItem(String category, String image, String name, String description, String price, boolean available, int orderCount) {
         this.category = category;
+        this.image = image;
+        this.name = name;
+        this.description = description;
+        this.price = price;
         this.available = available;
+        this.orderCount = orderCount;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getName() {
@@ -29,12 +62,20 @@ public class MenuItem {
         this.name = name;
     }
 
-    public String getCategory() {
-        return category;
+    public String getDescription() {
+        return description;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 
     public boolean isAvailable() {

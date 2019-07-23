@@ -93,12 +93,12 @@ public class AddOrderActivity extends AppCompatActivity {
         String orderItemName = prefManager.getOrderName();
         int orderItemCount = prefManager.getOrderCount();
 
-        if(orderItemName.equals("") || orderItemCount ==0) {
+        if (orderItemName.equals("") || orderItemCount == 0) {
             Toast.makeText(this, "Select items first.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if(TextUtils.isEmpty(etTableNumber.getText())) {
+        if (TextUtils.isEmpty(etTableNumber.getText())) {
             Toast.makeText(this, "Table number is required.", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -150,29 +150,29 @@ public class AddOrderActivity extends AppCompatActivity {
         List<MenuItem> softDrinkList = new ArrayList<>();
         List<MenuItem> hardDrinkList = new ArrayList<>();
 
-        beverageList.add(new MenuItem("Tea", true));
-        beverageList.add(new MenuItem("Coffee", true));
-        beverageList.add(new MenuItem("Milk", true));
-        beverageList.add(new MenuItem("Juice", true));
+        beverageList.add(new MenuItem("http://picsum.photos/300", "Tea", "Item description/types", "Rs. 100"));
+        beverageList.add(new MenuItem("http://picsum.photos/350", "Coffee", "Item description/types", "Rs. 100"));
+        beverageList.add(new MenuItem("http://picsum.photos/500", "Milk", "Item description/types", "Rs. 100"));
+        beverageList.add(new MenuItem("http://picsum.photos/450", "Juice", "Item description/types", "Rs. 100"));
 
-        breakfastList.add(new MenuItem("Omelet", true));
-        breakfastList.add(new MenuItem("Hard-boiled Eggs", true));
+        breakfastList.add(new MenuItem("http://picsum.photos/220", "Omelet", "Item description/types", "Rs. 100"));
+        breakfastList.add(new MenuItem("http://picsum.photos/230", "Hard-boiled Eggs", "Item description/types", "Rs. 100"));
 
-        bakeryIcecreamList.add(new MenuItem("Bread", true));
-        bakeryIcecreamList.add(new MenuItem("Cake", true));
-        bakeryIcecreamList.add(new MenuItem("Ice-cream", true));
+        bakeryIcecreamList.add(new MenuItem("http://picsum.photos/240", "Bread", "Item description/types", "Rs. 100"));
+        bakeryIcecreamList.add(new MenuItem("http://picsum.photos/260", "Cake", "Item description/types", "Rs. 100"));
+        bakeryIcecreamList.add(new MenuItem("http://picsum.photos/280", "Ice-cream", "Item description/types", "Rs. 100"));
 
-        lunchList.add(new MenuItem("Mo:Mo", true));
+        lunchList.add(new MenuItem("http://picsum.photos/310", "Mo:Mo", "Item description/types", "Rs. 100"));
 
-        snacksList.add(new MenuItem("Soup", true));
+        snacksList.add(new MenuItem("http://picsum.photos/320", "Soup", "Item description/types", "Rs. 100"));
 
-        dinnerList.add(new MenuItem("Rice", true));
+        dinnerList.add(new MenuItem("http://picsum.photos/330", "Rice", "Item description/types", "Rs. 100"));
 
-        softDrinkList.add(new MenuItem("Wine", true));
-        softDrinkList.add(new MenuItem("Beer", true));
+        softDrinkList.add(new MenuItem("http://picsum.photos/340", "Wine", "Item description/types", "Rs. 100"));
+        softDrinkList.add(new MenuItem("http://picsum.photos/350", "Beer", "Item description/types", "Rs. 100"));
 
-        hardDrinkList.add(new MenuItem("Whiskey", true));
-        hardDrinkList.add(new MenuItem("Vodka", true));
+        hardDrinkList.add(new MenuItem("http://picsum.photos/360", "Whiskey", "Item description/types", "Rs. 100"));
+        hardDrinkList.add(new MenuItem("http://picsum.photos/400", "Vodka", "Item description/types", "Rs. 100"));
 
         menuList.add(new Menu("Beverage", beverageList));
         menuList.add(new Menu("Breakfast", breakfastList));
