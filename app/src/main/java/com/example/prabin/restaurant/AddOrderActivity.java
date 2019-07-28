@@ -4,14 +4,17 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.prabin.restaurant.adapter.FoodMenuPagerAdapter;
@@ -42,9 +45,7 @@ public class AddOrderActivity extends AppCompatActivity {
 
     List<Menu> menuList;
 
-    Spinner spinPackingType, spinPackingLevel;
     Button btnAddOrder;
-    EditText etTableNumber, etRemarks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,73 +72,107 @@ public class AddOrderActivity extends AppCompatActivity {
 
         dbHelper = new DatabaseHelper(this);
 
-        spinPackingType = findViewById(R.id.add_order_spinPackingType);
-        spinPackingLevel = findViewById(R.id.add_order_spinPackingLevel);
-        etTableNumber = findViewById(R.id.add_order_etTableNo);
-        etRemarks = findViewById(R.id.add_order_etRemarks);
 
         btnAddOrder = findViewById(R.id.add_order_btnSubmit);
 
         btnAddOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                submitOrder(view);
+                submitOrder();
             }
         });
 
     }
 
-
-    private void submitOrder(final View view) {
+    private void submitOrder() {
         final PrefManager prefManager = new PrefManager(this);
-        String orderItemName = prefManager.getOrderName();
-        int orderItemCount = prefManager.getOrderCount();
+        final String orderItemName = prefManager.getOrderName();
+        final int orderItemCount = prefManager.getOrderCount();
+        final int orderItemPrice = prefManager.getOrderPriceRate();
 
         if (orderItemName.equals("") || orderItemCount == 0) {
-            Toast.makeText(this, "Select items first.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Select an item first.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (TextUtils.isEmpty(etTableNumber.getText())) {
-            Toast.makeText(this, "Table number is required.", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        final AlertDialog alertDialogBuilder = new AlertDialog.Builder(this).create();
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_confirm_order, null);
 
-        String tableNumber = etTableNumber.getText().toString();
-        String remarks = etRemarks.getText().toString();
+        final TextView itemName, itemQuantity, itemPrice;
+        final EditText eTableNumber, etRemarks;
+        Button btnConfirm, btnCancel;
+        final Spinner spinPackingType, spinPackingLevel;
 
-        String[] packingTypes = getResources().getStringArray(R.array.packingType);
-        String[] packingLevels = getResources().getStringArray(R.array.packingLevels);
+        itemName = dialogView.findViewById(R.id.add_order_tvItemName);
+        itemQuantity = dialogView.findViewById(R.id.add_order_tvItemQuantity);
+        itemPrice = dialogView.findViewById(R.id.add_order_tvItemPrice);
 
-        String packing = packingTypes[spinPackingType.getSelectedItemPosition()]
-                + " - " + packingLevels[spinPackingLevel.getSelectedItemPosition()];
-        String time = getTime();
+        eTableNumber = dialogView.findViewById(R.id.add_order_etTableNo);
+        etRemarks = dialogView.findViewById(R.id.add_order_etRemarks);
 
-        final OrderItem orderItem = new OrderItem();
-        orderItem.setTableNumber(tableNumber);
-        orderItem.setTime(time);
-        orderItem.setItems(orderItemName);
-        orderItem.setQuantity(String.valueOf(orderItemCount));
-        orderItem.setRemarks(remarks);
-        orderItem.setPacking(packing);
-        orderItem.setKitchenProcess("Order");
-        orderItem.setChefName("-");
-        orderItem.setCompleted("0");
+        spinPackingType = dialogView.findViewById(R.id.add_order_spinPackingType);
+        spinPackingLevel = dialogView.findViewById(R.id.add_order_spinPackingLevel);
 
-        DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("orders");
+        btnConfirm = dialogView.findViewById(R.id.add_order_btnConfirm);
+        btnCancel = dialogView.findViewById(R.id.add_order_btnCancel);
 
-        orderRef.push().setValue(orderItem).addOnCompleteListener(new OnCompleteListener<Void>() {
+        itemName.setText(orderItemName);
+        itemQuantity.setText(String.valueOf(orderItemCount));
+        itemPrice.setText("Rs. " + (orderItemCount * orderItemPrice) + " (@Rs." + orderItemPrice + ")");
+
+        alertDialogBuilder.setView(dialogView);
+        alertDialogBuilder.show();
+
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
+            public void onClick(View view) {
+                if (TextUtils.isEmpty(eTableNumber.getText())) {
+                    Toast.makeText(AddOrderActivity.this, "Table number is required.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-                Snackbar.make(view, "Order Placed", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                prefManager.clearOrderDetails();
-                finish();
+                String tableNumber = eTableNumber.getText().toString();
+                String remarks = etRemarks.getText().toString();
+
+                String[] packingTypes = getResources().getStringArray(R.array.packingType);
+                String[] packingLevels = getResources().getStringArray(R.array.packingLevels);
+
+                String packing = packingTypes[spinPackingType.getSelectedItemPosition()]
+                        + " - " + packingLevels[spinPackingLevel.getSelectedItemPosition()];
+                String time = getTime();
+
+                final OrderItem orderItem = new OrderItem();
+                orderItem.setTableNumber(tableNumber);
+                orderItem.setTime(time);
+                orderItem.setItems(orderItemName);
+                orderItem.setQuantity(String.valueOf(orderItemCount));
+                orderItem.setRemarks(remarks);
+                orderItem.setPacking(packing);
+                orderItem.setKitchenProcess("Order");
+                orderItem.setChefName("-");
+                orderItem.setCompleted("0");
+
+                DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("orders");
+
+                orderRef.push().setValue(orderItem).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Toast.makeText(AddOrderActivity.this, "Order Added", Toast.LENGTH_SHORT).show();
+//                finish();
+                        alertDialogBuilder.dismiss();
 //               dbHelper.addNewOrder(orderItem);
+                    }
+                });
             }
         });
 
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialogBuilder.dismiss();
+            }
+        });
     }
 
     private void setMenuItems() {
@@ -150,29 +185,32 @@ public class AddOrderActivity extends AppCompatActivity {
         List<MenuItem> softDrinkList = new ArrayList<>();
         List<MenuItem> hardDrinkList = new ArrayList<>();
 
-        beverageList.add(new MenuItem("http://picsum.photos/300", "Tea", "Item description/types", "Rs. 100"));
-        beverageList.add(new MenuItem("http://picsum.photos/350", "Coffee", "Item description/types", "Rs. 100"));
-        beverageList.add(new MenuItem("http://picsum.photos/500", "Milk", "Item description/types", "Rs. 100"));
-        beverageList.add(new MenuItem("http://picsum.photos/450", "Juice", "Item description/types", "Rs. 100"));
+        beverageList.add(new MenuItem("http://picsum.photos/300", "Tea", "Item description/types", 10));
+        beverageList.add(new MenuItem("http://picsum.photos/350", "Coffee", "Item description/types", 20));
+        beverageList.add(new MenuItem("http://picsum.photos/500", "Milk", "Item description/types", 30));
+        beverageList.add(new MenuItem("http://picsum.photos/800", "Tea", "Item description/types", 40));
+        beverageList.add(new MenuItem("http://picsum.photos/150", "Coffee", "Item description/types", 50));
+        beverageList.add(new MenuItem("http://picsum.photos/600", "Milk", "Item description/types", 100));
+        beverageList.add(new MenuItem("http://picsum.photos/650", "Juice", "Item description/types", 100));
 
-        breakfastList.add(new MenuItem("http://picsum.photos/220", "Omelet", "Item description/types", "Rs. 100"));
-        breakfastList.add(new MenuItem("http://picsum.photos/230", "Hard-boiled Eggs", "Item description/types", "Rs. 100"));
+        breakfastList.add(new MenuItem("http://picsum.photos/220", "Omelet", "Item description/types", 100));
+        breakfastList.add(new MenuItem("http://picsum.photos/230", "Hard-boiled Eggs", "Item description/types", 100));
 
-        bakeryIcecreamList.add(new MenuItem("http://picsum.photos/240", "Bread", "Item description/types", "Rs. 100"));
-        bakeryIcecreamList.add(new MenuItem("http://picsum.photos/260", "Cake", "Item description/types", "Rs. 100"));
-        bakeryIcecreamList.add(new MenuItem("http://picsum.photos/280", "Ice-cream", "Item description/types", "Rs. 100"));
+        bakeryIcecreamList.add(new MenuItem("http://picsum.photos/240", "Bread", "Item description/types", 100));
+        bakeryIcecreamList.add(new MenuItem("http://picsum.photos/260", "Cake", "Item description/types", 100));
+        bakeryIcecreamList.add(new MenuItem("http://picsum.photos/280", "Ice-cream", "Item description/types", 100));
 
-        lunchList.add(new MenuItem("http://picsum.photos/310", "Mo:Mo", "Item description/types", "Rs. 100"));
+        lunchList.add(new MenuItem("http://picsum.photos/310", "Mo:Mo", "Item description/types", 100));
 
-        snacksList.add(new MenuItem("http://picsum.photos/320", "Soup", "Item description/types", "Rs. 100"));
+        snacksList.add(new MenuItem("http://picsum.photos/320", "Soup", "Item description/types", 100));
 
-        dinnerList.add(new MenuItem("http://picsum.photos/330", "Rice", "Item description/types", "Rs. 100"));
+        dinnerList.add(new MenuItem("http://picsum.photos/330", "Rice", "Item description/types", 100));
 
-        softDrinkList.add(new MenuItem("http://picsum.photos/340", "Wine", "Item description/types", "Rs. 100"));
-        softDrinkList.add(new MenuItem("http://picsum.photos/350", "Beer", "Item description/types", "Rs. 100"));
+        softDrinkList.add(new MenuItem("http://picsum.photos/340", "Wine", "Item description/types", 100));
+        softDrinkList.add(new MenuItem("http://picsum.photos/350", "Beer", "Item description/types", 100));
 
-        hardDrinkList.add(new MenuItem("http://picsum.photos/360", "Whiskey", "Item description/types", "Rs. 100"));
-        hardDrinkList.add(new MenuItem("http://picsum.photos/400", "Vodka", "Item description/types", "Rs. 100"));
+        hardDrinkList.add(new MenuItem("http://picsum.photos/360", "Whiskey", "Item description/types", 100));
+        hardDrinkList.add(new MenuItem("http://picsum.photos/400", "Vodka", "Item description/types", 100));
 
         menuList.add(new Menu("Beverage", beverageList));
         menuList.add(new Menu("Breakfast", breakfastList));

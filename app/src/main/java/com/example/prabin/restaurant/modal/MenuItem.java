@@ -1,9 +1,9 @@
 package com.example.prabin.restaurant.modal;
 
 public class MenuItem {
-    private String category, image, name, description, price;
+    private String category, image, name, description;
     private boolean available;
-    private int orderCount;
+    private int orderCount, price;
 
     public MenuItem() {
     }
@@ -13,12 +13,12 @@ public class MenuItem {
         this.image = "";
         this.name = name;
         this.description = "";
-        this.price = "Rs. ";
+        this.price = 0;
         this.available = true;
         this.orderCount = 0;
     }
 
-    public MenuItem(String image, String name, String description, String price) {
+    public MenuItem(String image, String name, String description, int price) {
         this.category = "";
         this.image = image;
         this.name = name;
@@ -28,7 +28,7 @@ public class MenuItem {
         this.orderCount = 0;
     }
 
-    public MenuItem(String category, String image, String name, String description, String price, boolean available, int orderCount) {
+    public MenuItem(String category, String image, String name, String description, int price, boolean available, int orderCount) {
         this.category = category;
         this.image = image;
         this.name = name;
@@ -70,11 +70,11 @@ public class MenuItem {
         this.description = description;
     }
 
-    public String getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 

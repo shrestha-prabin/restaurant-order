@@ -49,19 +49,24 @@ public class FoodMenuFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Bundle args = getArguments();
 
-        mMenuList = (ArrayList<MenuItem>)args.getSerializable(ARG_OBJECT);
+        try {
+            mMenuList = (ArrayList<MenuItem>) args.getSerializable(ARG_OBJECT);
 
-        mRecyclerView = view.findViewById(R.id.food_menu_rvList);
-        mAdapter = new MenuItemListRVAdapter(getContext(), mMenuList);
+            mRecyclerView = view.findViewById(R.id.food_menu_rvList);
+            mAdapter = new MenuItemListRVAdapter(getContext(), mMenuList);
 
 //        LinearLayoutManager llManager = new LinearLayoutManager(getContext());
 //        mRecyclerView.setLayoutManager(llManager);
 
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2    ));
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setAdapter(mAdapter);
+            mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+            mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+            mRecyclerView.setAdapter(mAdapter);
 
-        mRecyclerView.setNestedScrollingEnabled(false);
+            mRecyclerView.setNestedScrollingEnabled(false);
 //        mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), DividerItemDecoration.VERTICAL));
+        } catch (Exception e) {
+
+        }
     }
+
 }

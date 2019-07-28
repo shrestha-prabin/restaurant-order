@@ -46,7 +46,7 @@ public class MenuItemListRVAdapter extends RecyclerView.Adapter<MenuItemListRVAd
         Glide.with(mContext).load(item.getImage()).centerCrop().into(viewHolder.ivImage);
         viewHolder.tvItemName.setText(item.getName());
         viewHolder.tvItemDescription.setText(item.getDescription());
-        viewHolder.tvPrice.setText(item.getPrice());
+        viewHolder.tvPrice.setText("Rs. " + item.getPrice());
         viewHolder.tvCount.setText(String.valueOf(item.getOrderCount()));
 
         viewHolder.ibRemove.setOnClickListener(new View.OnClickListener() {
@@ -57,6 +57,7 @@ public class MenuItemListRVAdapter extends RecyclerView.Adapter<MenuItemListRVAd
                 decreaseOrderCount(i);
                 mPrefManager.setOrderItemName(item.getName());
                 mPrefManager.setOrderItemCount(item.getOrderCount());
+                mPrefManager.setOrderItemRate(item.getPrice());
             }
         });
 
@@ -68,6 +69,8 @@ public class MenuItemListRVAdapter extends RecyclerView.Adapter<MenuItemListRVAd
                 increaseOrderCount(i);
                 mPrefManager.setOrderItemName(item.getName());
                 mPrefManager.setOrderItemCount(item.getOrderCount());
+                mPrefManager.setOrderItemCount(item.getOrderCount());
+                mPrefManager.setOrderItemRate(item.getPrice());
             }
         });
     }
@@ -129,5 +132,12 @@ public class MenuItemListRVAdapter extends RecyclerView.Adapter<MenuItemListRVAd
             ibAdd = itemView.findViewById(R.id.menu_item_increase);
             ibRemove = itemView.findViewById(R.id.menu_item_decrease);
         }
+    }
+
+    public void resetOrder() {
+        for (int j = 0; j < this.getItemCount(); j++) {
+                mMenuItemList.get(j).setOrderCount(0);
+        }
+        this.notifyDataSetChanged();
     }
 }

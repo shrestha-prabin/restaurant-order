@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.prabin.restaurant.modal.User;
 
@@ -26,6 +27,7 @@ public class PrefManager {
     private static final String PREF_ORDER_CART = "ORDER";
     private static final String PREF_ORDER_CART_ITEM = "ORDER_ITEM";
     private static final String PREF_ORDER_CART_COUNT = "ORDER_ITEM_COUNT";
+    private static final String PREF_ORDER_CART_RATE = "ORDER_ITEM_RATE";
 
     public PrefManager(Context context) {
         mContext = context;
@@ -93,13 +95,29 @@ public class PrefManager {
         editor.apply();
     }
 
+    public void setOrderItemRate(int rate) {
+        SharedPreferences sharedPrefs = mContext.getSharedPreferences(PREF_ORDER_CART, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+
+        editor.putInt(PREF_ORDER_CART_RATE, rate);
+
+        editor.apply();
+
+    }
+
     public String getOrderName() {
         SharedPreferences sharedPrefs = mContext.getSharedPreferences(PREF_ORDER_CART, Context.MODE_PRIVATE);
         return sharedPrefs.getString(PREF_ORDER_CART_ITEM, "");
     }
+
     public int getOrderCount() {
         SharedPreferences sharedPrefs = mContext.getSharedPreferences(PREF_ORDER_CART, Context.MODE_PRIVATE);
         return sharedPrefs.getInt(PREF_ORDER_CART_COUNT, 0);
+    }
+
+    public int getOrderPriceRate() {
+        SharedPreferences sharedPrefs = mContext.getSharedPreferences(PREF_ORDER_CART, Context.MODE_PRIVATE);
+        return sharedPrefs.getInt(PREF_ORDER_CART_RATE, 0);
     }
 
     public void clearOrderDetails() {

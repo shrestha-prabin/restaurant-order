@@ -115,6 +115,8 @@ public class TransactionTableFragment extends Fragment {
                         orderItemList.add(item);
                     }
                     sortOrderItems();
+
+                    mAdapter.updateDataList(orderItemList);
                     mAdapter.notifyDataSetChanged();
                 }
             }
@@ -137,39 +139,17 @@ public class TransactionTableFragment extends Fragment {
 
     private void listenDataChanges() {
         DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("orders");
-//        orderRef.keepSynced(true);
+        orderRef.keepSynced(true);
 
         orderRef.limitToLast(1).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 fetchData();
-//                rvTransactionTable.scrollToPosition(orderItemList.size());
-
-//                OrderItem item = dataSnapshot.getValue(OrderItem.class);
-//
-//                String key = dataSnapshot.getKey();
-//                if (!orderItemKeysList.contains(key)) {
-//                    orderItemKeysList.add(dataSnapshot.getKey());
-//                    orderItemList.add(item);
-//                    mAdapter.notifyDataSetChanged();
-//                }
-
-//                dbHelper.addNewOrder(item);
-//                updateDisplayTable();
-
-
-//                orderItemList = dbHelper.getOrders();
-
-//                mAdapter.updateDataList(orderItemList);
             }
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 fetchData();
-//                OrderItem updatedItem = dataSnapshot.getValue(OrderItem.class);
-//                String key = dataSnapshot.getKey();
-
-//                mAdapter.updateDataItem(key, updatedItem);
             }
 
             @Override
@@ -202,12 +182,4 @@ public class TransactionTableFragment extends Fragment {
             }
         });
     }
-
-//    private void updateDisplayTable() {
-//
-//        orderItemList = dbHelper.getOrders();
-//
-//        mAdapter.updateDataList(orderItemList);
-//    }
-
 }

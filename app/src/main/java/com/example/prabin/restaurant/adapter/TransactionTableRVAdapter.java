@@ -3,6 +3,7 @@ package com.example.prabin.restaurant.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,11 +13,13 @@ import android.widget.TextView;
 
 import com.example.prabin.restaurant.R;
 import com.example.prabin.restaurant.helper.PrefManager;
+import com.example.prabin.restaurant.helper.TransactionDiffCallback;
 import com.example.prabin.restaurant.modal.OrderItem;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -167,6 +170,17 @@ public class TransactionTableRVAdapter extends RecyclerView.Adapter<TransactionT
 
         item.setChefName(new PrefManager(mContext).getUserDetails().getFullName());
         mOrderRef.child(item.getKey()).setValue(item);
+    }
+
+    public void updateDataList(List<OrderItem> newList) {
+        if (this.orderItemList.isEmpty()) {
+            orderItemList.clear();
+            this.orderItemList.addAll(newList);
+            this.notifyDataSetChanged();
+        } else {
+            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new TransactionDiffCallback(this.orderItemList, newList));
+            diffResult.dispatchUpdatesTo(this);
+        }
     }
 
 //    public void updateDataList(List<OrderItem> data) {
